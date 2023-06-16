@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "863151226507",
+    "project_id": "project-mini-gecw",
+    "storage_bucket": "project-mini-gecw.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863151226507:android:9a50bcc33f09cf2dd75e8e",
+        "android_client_info": {
+          "package_name": "com.example.m_trackn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863151226507-opaurr8ogfunpli6q4jpp4nq7opfnm0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB35v90XyUeQJRyBwCCZrWC5UGvWxMJRj4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863151226507-opaurr8ogfunpli6q4jpp4nq7opfnm0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

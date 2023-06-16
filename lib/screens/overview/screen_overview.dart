@@ -272,12 +272,7 @@ class _nameState extends State<overview> {
                   return Center(
                     child: Column(
                       children: [
-                        chart(
-                            q: a,
-                            v:
-                                // 'e',
-                                atext(),
-                            w: const expense()),
+                        chart(q: a, v: atext(), w: const expense()),
                         SizedBox(
                           height: mediaquery.height * .007,
                         ),

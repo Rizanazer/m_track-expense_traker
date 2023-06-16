@@ -13,6 +13,12 @@ import 'package:permission_handler/permission_handler.dart';
 
 // import 'package:m_trackn/screens/overview/screen_overview.dart';
 late Size mediaquery;
+String dropdownValue = list.first;
+
+const List<String> list = <String>[
+  'IO-bank',
+  'Canara Bank',
+];
 
 class SelectGridPage extends StatefulWidget {
   @override
@@ -53,7 +59,9 @@ class _SelectGridPageState extends State<SelectGridPage> {
       'BK-IOBCHN',
       'AD-IOBCHN',
       'BT-IOBCHN',
-      'CP-IOBCHN'
+      'CP-IOBCHN',
+      'JK-CANBNK',
+      'AX-CANBNK'
     ]);
     super.initState();
     controller.addListener(rebuild);
@@ -108,30 +116,59 @@ class _SelectGridPageState extends State<SelectGridPage> {
       var regex;
       var mode;
       var purpose = '';
-      if (smsText.contains('Debit')) {
-        regex = RegExp(r'(?<=Rs\.)\d+\.\d+', caseSensitive: false);
-        mode = 'DEBITED';
-      } else if (smsText.contains('Credit')) {
-        regex = RegExp(r'(?<=Rs\.)\d+\.\d+', caseSensitive: false);
-        mode = 'CREDITED';
-      } else if (smsText.toLowerCase().contains('Your')) {
-        regex = RegExp(r'(?<=Rs\.)\d+\.\d+', caseSensitive: false);
-        mode = 'UPI';
-      } else {
-        continue;
-      }
-      Match? match = regex.firstMatch(smsText);
-      String? amount;
-      if (match != null) {
-        amount = match.group(0);
-      }
-      data['id'] = id1;
-      data["amount"] = amount;
-      data["DateTime"] = date;
-      data["mode"] = mode;
-      data["purpose"] = purpose;
+      if (dropdownValue == 'IO-bank') {
+        if (smsText.contains('Debit')) {
+          regex = RegExp(r'(?<=Rs\.)\d+\.\d+', caseSensitive: false);
+          mode = 'DEBITED';
+        } else if (smsText.contains('Credit')) {
+          regex = RegExp(r'(?<=Rs\.)\d+\.\d+', caseSensitive: false);
+          mode = 'CREDITED';
+        } else if (smsText.toLowerCase().contains('Your')) {
+          regex = RegExp(r'(?<=Rs\.)\d+\.\d+', caseSensitive: false);
+          mode = 'UPI';
+        } else {
+          continue;
+        }
+        Match? match = regex.firstMatch(smsText);
+        String? amount;
+        if (match != null) {
+          amount = match.group(0);
+        }
+        data['id'] = id1;
+        data["amount"] = amount;
+        data["DateTime"] = date;
+        data["mode"] = mode;
+        data["purpose"] = purpose;
 
-      mRootreference.child("BankDb").child('All').child(id1).update(data);
+        mRootreference.child("BankDb").child('All').child(id1).update(data);
+      } else if (dropdownValue == 'Canara Bank') {
+        if (smsText.contains('DEBIT')) {
+          regex = RegExp(r'(\d+\.\d{2}) (?:has been )?DEBITED',
+              caseSensitive: false);
+          mode = 'DEBITED';
+        } else if (smsText.contains('CREDIT')) {
+          regex = RegExp(r'(\d+\.\d{2}) (?:has been )?CREDITED',
+              caseSensitive: false);
+          mode = 'CREDITED';
+        } else if (smsText.toLowerCase().contains('UPI')) {
+          regex = RegExp(r'(?<=Rs\.)\d+(?:\.\d+)?', caseSensitive: false);
+          mode = 'UPI';
+        } else {
+          continue;
+        }
+        Match? match = regex.firstMatch(smsText);
+        String? amount;
+        if (match != null) {
+          amount = match.group(1);
+        }
+        data['id'] = id1;
+        data["amount"] = amount;
+        data["DateTime"] = date;
+        data["mode"] = mode;
+        data["purpose"] = purpose;
+
+        mRootreference.child("BankDb").child('All').child(id1).update(data);
+      }
     }
   }
 
@@ -157,6 +194,7 @@ class _SelectGridPageState extends State<SelectGridPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(dropdownValue);
     final isSelected = controller.value.isSelecting;
     final text = isSelected
         ? '${controller.value.amount} Images Selected'
@@ -201,6 +239,35 @@ class _SelectGridPageState extends State<SelectGridPage> {
           ),
         ),
       ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Text("enter ur bank: "),
+          buildDropdownButton(
+            dropdownValue,
+            list,
+            (String? value) {
+              setState(() {
+                dropdownValue = value!;
+              });
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildDropdownButton(
+      String selectedValue, List<String> dropdownValues, var onChanged) {
+    return DropdownButton<String>(
+      value: selectedValue,
+      onChanged: onChanged,
+      items: dropdownValues.map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
     );
   }
 }

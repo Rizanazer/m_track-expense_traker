@@ -115,7 +115,7 @@ class _SelectGridPageState extends State<SelectGridPage> {
 
       var regex;
       var mode;
-      var purpose = '';
+      var purpose = 'none_Assigned';
       if (dropdownValue == 'IO-bank') {
         if (smsText.contains('Debit')) {
           regex = RegExp(r'(?<=Rs\.)\d+\.\d+', caseSensitive: false);

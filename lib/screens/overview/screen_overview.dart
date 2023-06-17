@@ -1,3 +1,7 @@
+// ignore: unused_import
+import 'dart:collection';
+
+// ignore: unused_import
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:firebase_database/firebase_database.dart';
 
@@ -7,18 +11,35 @@ import 'package:m_trackn/screens/category/expense.dart';
 import 'package:m_trackn/screens/category/income.dart';
 import 'package:m_trackn/screens/overview/stats/month_chart.dart';
 import 'package:m_trackn/screens/temp/temp_message.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:m_trackn/screens/transactions/dialogbox.dart';
+
+import '../../addn_widgets/button_name.dart';
+import '../../addn_widgets/button_normal.dart';
+import '../../addn_widgets/chart.dart';
+import '../../addn_widgets/pad_text.dart';
 
 late Size mediaquery;
 String dropdownValue = list1.first;
 RegExp? m;
-
+double limitValue = list2.first;
+var reference = FirebaseDatabase.instance.ref().child('BankDb');
 const List<String> list1 = <String>[
   'feb_23',
   'mar_23',
   'apr_23',
   'may_23',
   'jun_23',
+];
+const List<double> list2 = <double>[
+  10.00,
+  20.00,
+  30.00,
+  40.00,
+  50.00,
+  60.00,
+  70.00,
+  80.00,
+  90.00,
 ];
 
 // ignore: camel_case_types
@@ -142,6 +163,20 @@ class _nameState extends State<overview> {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget buildDropdownintButton(
+      double selectedValue, List<double> dropdownValues, var onChanged) {
+    return DropdownButton<double>(
+      value: selectedValue,
+      onChanged: onChanged,
+      items: dropdownValues.map((double value) {
+        return DropdownMenuItem<double>(
+          value: value,
+          child: Text(value.toString()),
         );
       }).toList(),
     );
@@ -351,6 +386,32 @@ class _nameState extends State<overview> {
                   ]),
                 ),
               ])),
+          Padding(
+            padding: EdgeInsets.only(left: mediaquery.width * 0.08),
+            child: Row(children: [
+              const Text(
+                "Select your m-limitr: ",
+                style: TextStyle(
+                    // color: Colors.white,
+                    fontWeight: FontWeight.w600),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: mediaquery.width * 0.06),
+                child: buildDropdownintButton(
+                  limitValue,
+                  list2,
+                  (double? value) {
+                    limitValue = value!;
+                    limit();
+                    HashMap<String, dynamic> limiter =
+                        HashMap<String, dynamic>();
+                    limiter['limitvalue'] = limitValue;
+                    reference.ref.update(limiter);
+                  },
+                ),
+              ),
+            ]),
+          ),
           Container(
             margin: EdgeInsets.only(
               top: mediaquery.height * .009,
@@ -392,10 +453,43 @@ class _nameState extends State<overview> {
                 Column(children: [
                   Row(
                     children: [
-                      Container(
+                      InkWell(
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('not allocated')));
+                        },
+                        child: Container(
+                            margin: EdgeInsets.only(
+                              top: mediaquery.height * .009,
+                              left: mediaquery.width * .05,
+                              // right: mediaquery.width * .03,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(
+                                  mediaquery.width * 0.05),
+                              color: Colors.transparent,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: mediaquery.width * 0.14,
+                                  vertical: mediaquery.width * 0.14),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: mediaquery.width * 0.02),
+                                child: const Text("daily"),
+                              ),
+                            )),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('not allocated')));
+                        },
+                        child: Container(
                           margin: EdgeInsets.only(
                             top: mediaquery.height * .009,
-                            left: mediaquery.width * .05,
+                            left: mediaquery.width * .03,
                             // right: mediaquery.width * .03,
                           ),
                           decoration: BoxDecoration(
@@ -410,30 +504,9 @@ class _nameState extends State<overview> {
                                 vertical: mediaquery.width * 0.14),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: mediaquery.width * 0.02),
-                              child: const Text("daily"),
+                                  horizontal: mediaquery.width * 0.04),
+                              child: const Text("all"),
                             ),
-                          )),
-                      Container(
-                        margin: EdgeInsets.only(
-                          top: mediaquery.height * .009,
-                          left: mediaquery.width * .03,
-                          // right: mediaquery.width * .03,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius:
-                              BorderRadius.circular(mediaquery.width * 0.05),
-                          color: Colors.transparent,
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: mediaquery.width * 0.14,
-                              vertical: mediaquery.width * 0.14),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: mediaquery.width * 0.04),
-                            child: const Text("all"),
                           ),
                         ),
                       )
@@ -473,28 +546,34 @@ class _nameState extends State<overview> {
                               ),
                             )),
                       ),
-                      Container(
-                          margin: EdgeInsets.only(
-                            top: mediaquery.height * .009,
-                            left: mediaquery.width * .03,
-                            // right: mediaquery.width * .03,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(),
-                            borderRadius:
-                                BorderRadius.circular(mediaquery.width * 0.05),
-                            color: Colors.transparent,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: mediaquery.width * 0.14,
-                                vertical: mediaquery.width * 0.14),
+                      InkWell(
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('not allocated')));
+                        },
+                        child: Container(
+                            margin: EdgeInsets.only(
+                              top: mediaquery.height * .009,
+                              left: mediaquery.width * .03,
+                              // right: mediaquery.width * .03,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(
+                                  mediaquery.width * 0.05),
+                              color: Colors.transparent,
+                            ),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: mediaquery.width * 0.015),
-                              child: const Text("yearly"),
-                            ),
-                          ))
+                                  horizontal: mediaquery.width * 0.14,
+                                  vertical: mediaquery.width * 0.14),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: mediaquery.width * 0.015),
+                                child: const Text("yearly"),
+                              ),
+                            )),
+                      )
                     ],
                   )
                 ]),
@@ -536,184 +615,19 @@ class _nameState extends State<overview> {
                 height: mediaquery.width * 0.05,
               )
             ]),
-          )
+          ),
         ]),
       ),
     ));
   }
-}
 
-// ignore: camel_case_types, must_be_immutable
-class chart extends StatelessWidget {
-  final double q;
-  String v;
-  // ignore: prefer_typing_uninitialized_variables
-  final w;
-  chart({super.key, required this.q, required this.v, required this.w});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => w));
-      },
-      child: CircularPercentIndicator(
-        backgroundColor: Colors.transparent,
-        progressColor: const Color.fromARGB(255, 139, 57, 171),
-        radius: 50.0,
-        lineWidth: 10.0,
-        animation: true,
-        percent: q,
-        center: Text(
-          v,
-          style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
-              color: Color.fromARGB(255, 139, 57, 171)),
-        ),
-      ),
-    );
-  }
-}
-
-// ignore: camel_case_types
-class buttonname extends StatelessWidget {
-  final String name;
-  final double x;
-  final double y;
-  final double z;
-  // ignore: prefer_typing_uninitialized_variables
-  final icon;
-  // ignore: prefer_typing_uninitialized_variables
-  final pagex;
-  const buttonname(
-      {super.key,
-      required this.name,
-      required this.x,
-      required this.pagex,
-      required this.icon,
-      required this.y,
-      required this.z});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 10),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => pagex));
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(252, 244, 255, 1),
-                    foregroundColor: Colors.black,
-                    padding: EdgeInsets.symmetric(horizontal: x, vertical: y)),
-                label: Text(name),
-                icon: Image.asset(
-                  icon,
-                  width: 20,
-                  height: 20,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: CircularPercentIndicator(
-                  radius: 18,
-                  animation: true,
-                  lineWidth: 5,
-                  progressColor: Colors.red,
-                  percent: z,
-                ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class button_normal extends StatelessWidget {
-  final String name;
-  final double x;
-  final double y;
-  final double z;
-  // final Function onpressed;
-  // ignore: prefer_typing_uninitialized_variables
-  final color;
-  // ignore: prefer_typing_uninitialized_variables
-  final icon;
-  // ignore: prefer_typing_uninitialized_variables
-
-  const button_normal({
-    super.key,
-    required this.name,
-    required this.x,
-    required this.icon,
-    required this.y,
-    required this.z,
-    this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 10),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: color,
-                    foregroundColor: Colors.black,
-                    padding: EdgeInsets.symmetric(horizontal: x, vertical: y)),
-                label: Text(name),
-                icon: Image.asset(
-                  icon,
-                  width: 20,
-                  height: 20,
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class padtext extends StatelessWidget {
-  final String name;
-  final FontWeight fontWeight;
-  final double fontsize;
-  // ignore: prefer_typing_uninitialized_variables
-  final color;
-  const padtext(
-      {super.key,
-      required this.name,
-      required this.fontsize,
-      required this.fontWeight,
-      required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 0),
-      child: Text(
-        name,
-        style:
-            TextStyle(fontSize: fontsize, fontWeight: fontWeight, color: color),
-      ),
-    );
+  limit() {
+    if (limitValue <= (a * 100.00)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("your way over ur limit bro....")));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("your good bro....")));
+    }
   }
 }

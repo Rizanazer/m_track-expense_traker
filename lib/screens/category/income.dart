@@ -78,8 +78,9 @@ class _ScreenTransactionState extends State<income> {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)),
+            // image: DecorationImage(
+            //     image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)),
+            color: Color(0xFFFDE1D7)),
         child: FirebaseAnimatedList(
           query: reference,
           itemBuilder: (BuildContext context, DataSnapshot snapshot,

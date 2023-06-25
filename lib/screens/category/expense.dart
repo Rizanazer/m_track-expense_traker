@@ -130,9 +130,9 @@ class _expenseState extends State<expense> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)),
+        decoration: const BoxDecoration(color: Color(0xFFFDE1D7)),
+        // image: DecorationImage(
+        //     image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)),
         child: FirebaseAnimatedList(
           query: reference,
           itemBuilder: (BuildContext context, DataSnapshot snapshot,

@@ -316,7 +316,7 @@ class _temp_msgState extends State<temp_msg> {
 
       var regex;
       var mode;
-      var purpose = '';
+      var purpose = 'none_Assigned';
       if (smsText.contains('Debit')) {
         regex = RegExp(r'(?<=Rs\.)\d+\.\d+', caseSensitive: false);
         mode = 'DEBITED';

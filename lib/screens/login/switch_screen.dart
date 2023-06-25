@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:m_trackn/screens/afterlogin/budgetinput.dart';
 // import 'package:m_trackn/screens/afterlogin/budgetinput.dart';
 
-import 'package:m_trackn/screens/login/login.dart';
+// import 'package:m_trackn/screens/login/login.dart';
+import 'package:m_trackn/screens/onboding/onboding_screen.dart';
 // import 'package:m_trackn/screens/home/screen_home.dart';
 
 // ignore: camel_case_types
@@ -19,7 +20,7 @@ class mainpage extends StatelessWidget {
           if (snapshot.hasData) {
             return priority();
           } else {
-            return const login();
+            return const OnbodingScreen();
           }
         },
       ),

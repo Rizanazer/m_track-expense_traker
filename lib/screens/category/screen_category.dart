@@ -22,33 +22,39 @@ class _ScreenCategoryState extends State<ScreenCategory>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)),
-        child: Column(
-          children: [
-            TabBar(
-              controller: _tabController,
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
-              tabs: const [
-                Tab(text: 'INCOME'),
-                Tab(
-                  text: 'EXPENSE',
+      body: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(color: Color(0xFFFDE1D7)),
+          // image: DecorationImage(
+          //     image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)
+
+          child: Container(
+            // margin: EdgeInsets.only(top: 50),
+            child: Column(
+              children: [
+                TabBar(
+                  controller: _tabController,
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.grey,
+                  tabs: const [
+                    Tab(text: 'INCOME'),
+                    Tab(
+                      text: 'EXPENSE',
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: const [
+                      income(),
+                      expense(),
+                    ],
+                  ),
                 ),
               ],
             ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: const [
-                  income(),
-                  expense(),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

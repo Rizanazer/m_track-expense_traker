@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
+import 'package:m_trackn/addn_widgets/menu.dart';
 import 'package:m_trackn/screens/category/screen_category.dart';
 import 'package:m_trackn/screens/home/widgets/bottom_navigation.dart';
 import 'package:m_trackn/screens/overview/screen_overview.dart';
@@ -10,6 +12,7 @@ class ScreenHome extends StatelessWidget {
   static ValueNotifier<int> selectedIndexNotifier = ValueNotifier(0);
 
   final _pages = const [
+    menu(),
     overview(),
     ScreenTransaction(),
     ScreenCategory(),
@@ -18,12 +21,15 @@ class ScreenHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFFFDE1D7),
       // appBar: AppBar(
       //   // title: Text('MONEY MANAGER'),
       //   centerTitle: true,
       // ),
-      bottomNavigationBar: const MoneyManagerBottomNavigation(),
+      bottomNavigationBar: MoneyManagerBottomNavigation(
+        behaviour: SnakeBarBehaviour.floating,
+        snakeShape: SnakeShape.circle,
+      ),
       body: SafeArea(
         child: ValueListenableBuilder(
           valueListenable: selectedIndexNotifier,
@@ -32,16 +38,6 @@ class ScreenHome extends StatelessWidget {
           },
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     if (selectedIndexNotifier.value == 0) {
-      //       print('Add Transaction');
-      //     } else {
-      //       print('Add Category');
-      //     }
-      //   },
-      //   child: Icon(Icons.add),
-      // ),
     );
   }
 }

@@ -1,6 +1,6 @@
 // ignore: unused_import
 import 'dart:collection';
-
+import 'package:flutter_carousel_slider/carousel_slider.dart';
 // ignore: unused_import
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:firebase_database/firebase_database.dart';
@@ -11,10 +11,10 @@ import 'package:m_trackn/screens/category/expense.dart';
 import 'package:m_trackn/screens/category/income.dart';
 import 'package:m_trackn/screens/overview/stats/month_chart.dart';
 import 'package:m_trackn/screens/temp/temp_message.dart';
-import 'package:m_trackn/screens/transactions/dialogbox.dart';
+// import 'package:m_trackn/screens/transactions/dialogbox.dart';
 
 import '../../addn_widgets/button_name.dart';
-import '../../addn_widgets/button_normal.dart';
+
 import '../../addn_widgets/chart.dart';
 import '../../addn_widgets/pad_text.dart';
 
@@ -227,7 +227,10 @@ class _nameState extends State<overview> {
     setState(() {
       // ignore: unused_local_variable
       w = val().then((val) {
-        w = val;
+        w = val!;
+      });
+      a = val1().then((val) {
+        a = val;
       });
     });
 
@@ -235,98 +238,100 @@ class _nameState extends State<overview> {
       print(val);
     });
     print(month());
-    setState(() {
-      // ignore: unused_local_variable
-      a = val1().then((val) {
-        a = val;
-      });
-    });
+
     getTotal("CREDITED").then((value) => print(value));
     getTotal("DEBITED").then((value) => print(value));
+
+    Widget _buildCarousel(item1, item2) {
+      return SizedBox(
+        height: 150,
+        width: mediaquery.width * 1,
+        child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            // create a container to hold each carousel item
+            return Container(
+              // set the width of each carousel item
+              child: Card(
+                color: Color.fromARGB(255, 248, 234, 230),
+                child: index == 0
+                    ? Center(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 150),
+                              child:
+                                  chart(q: w!, v: wtext(), w: const income()),
+                            ),
+                            SizedBox(
+                              height: mediaquery.height * .007,
+                            ),
+                            const padtext(
+                              name: "Income",
+                              fontsize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color.fromARGB(255, 139, 57, 171),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Center(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 150),
+                              child:
+                                  chart(q: a!, v: atext(), w: const expense()),
+                            ),
+                            SizedBox(
+                              height: mediaquery.height * .007,
+                            ),
+                            const padtext(
+                              name: "Expense",
+                              fontsize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Color.fromARGB(255, 139, 57, 171),
+                            ),
+                            SizedBox(
+                              height: mediaquery.height * .007,
+                            )
+                          ],
+                        ),
+                      ), // use the appropriate future builder widget based on the index
+              ),
+            );
+          },
+        ),
+      );
+    }
+
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
+        // margin: EdgeInsets.only(top: mediaquery.height * .12),
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)),
+            // image: DecorationImage(
+            //     image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)
+            color: Color(0xFFFDE1D7)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           FutureBuilder(
-            future: val(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  break;
-                case ConnectionState.waiting:
-                  return const CircularProgressIndicator(
-                    color: Colors.black54,
-                    strokeWidth: 2,
-                  );
-                case ConnectionState.active:
-                  break;
-                case ConnectionState.done:
-                  return Center(
-                    child: Column(
-                      children: [
-                        chart(
-                            q: w,
-                            v:
-                                // '5',
-                                wtext(),
-                            // (w * 100).toString().substring(0, 4),
-                            w: const income()),
-                        SizedBox(
-                          height: mediaquery.height * .007,
-                        ),
-                        const padtext(
-                          name: "Income",
-                          fontsize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 139, 57, 171),
-                        ),
-                      ],
-                    ),
-                  );
-              }
-              return const Text('Some error ocurred try getDoctor');
-            },
-          ),
-          FutureBuilder(
-            future: val1(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.none:
-                  break;
-                case ConnectionState.waiting:
-                  return const CircularProgressIndicator(
-                    color: Colors.black54,
-                    strokeWidth: 2,
-                  );
-                case ConnectionState.active:
-                  break;
-                case ConnectionState.done:
-                  return Center(
-                    child: Column(
-                      children: [
-                        chart(q: a, v: atext(), w: const expense()),
-                        SizedBox(
-                          height: mediaquery.height * .007,
-                        ),
-                        const padtext(
-                          name: "Expense",
-                          fontsize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromARGB(255, 139, 57, 171),
-                        ),
-                        SizedBox(
-                          height: mediaquery.height * .007,
-                        )
-                      ],
-                    ),
-                  );
-              }
-              return const Text('Some error ocurred try getDoctor');
-            },
-          ),
+              future: Future.wait([val(), val1()]),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  // if both future builders are done, build the carousel widget
+                  return _buildCarousel(snapshot.data[0], snapshot.data[1]);
+                } else {
+                  // show a loading indicator while waiting for the future builders to complete
+                  return Center(child: CircularProgressIndicator());
+                }
+              }),
+
+          //////////////////////////////////////////////////////
+
           Container(
             margin: EdgeInsets.only(
               top: mediaquery.height * .009,
@@ -401,7 +406,10 @@ class _nameState extends State<overview> {
                   limitValue,
                   list2,
                   (double? value) {
-                    limitValue = value!;
+                    setState(() {
+                      limitValue = value!;
+                    });
+
                     limit();
                     HashMap<String, dynamic> limiter =
                         HashMap<String, dynamic>();
@@ -461,14 +469,16 @@ class _nameState extends State<overview> {
                         child: Container(
                             margin: EdgeInsets.only(
                               top: mediaquery.height * .009,
-                              left: mediaquery.width * .05,
+                              left: mediaquery.width * .03,
                               // right: mediaquery.width * .03,
                             ),
                             decoration: BoxDecoration(
-                              border: Border.all(),
+                              border: Border.all(
+                                  color: const Color.fromARGB(137, 255, 0, 0),
+                                  width: 5),
                               borderRadius: BorderRadius.circular(
                                   mediaquery.width * 0.05),
-                              color: Colors.transparent,
+                              color: Colors.white,
                             ),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
@@ -493,10 +503,12 @@ class _nameState extends State<overview> {
                             // right: mediaquery.width * .03,
                           ),
                           decoration: BoxDecoration(
-                            border: Border.all(),
+                            border: Border.all(
+                                color: const Color.fromARGB(137, 255, 0, 0),
+                                width: 5),
                             borderRadius:
                                 BorderRadius.circular(mediaquery.width * 0.05),
-                            color: Colors.transparent,
+                            color: Colors.white,
                           ),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -526,14 +538,16 @@ class _nameState extends State<overview> {
                         child: Container(
                             margin: EdgeInsets.only(
                               top: mediaquery.height * .009,
-                              left: mediaquery.width * .05,
+                              left: mediaquery.width * .03,
                               // right: mediaquery.width * .03,
                             ),
                             decoration: BoxDecoration(
-                              border: Border.all(),
+                              border: Border.all(
+                                  color: const Color.fromARGB(137, 255, 0, 0),
+                                  width: 5),
                               borderRadius: BorderRadius.circular(
                                   mediaquery.width * 0.05),
-                              color: Colors.transparent,
+                              color: Colors.white,
                             ),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
@@ -558,10 +572,12 @@ class _nameState extends State<overview> {
                               // right: mediaquery.width * .03,
                             ),
                             decoration: BoxDecoration(
-                              border: Border.all(),
+                              border: Border.all(
+                                  color: const Color.fromARGB(137, 255, 0, 0),
+                                  width: 5),
                               borderRadius: BorderRadius.circular(
                                   mediaquery.width * 0.05),
-                              color: Colors.transparent,
+                              color: Colors.white,
                             ),
                             child: Padding(
                               padding: EdgeInsets.symmetric(
@@ -602,14 +618,6 @@ class _nameState extends State<overview> {
             child: Column(children: [
               SizedBox(
                 height: mediaquery.width * 0.05,
-              ),
-              button_normal(
-                name: "log out",
-                x: mediaquery.width * 0.32,
-                icon: "assets/loading.gif",
-                color: Colors.redAccent,
-                y: 20,
-                z: 0,
               ),
               SizedBox(
                 height: mediaquery.width * 0.05,

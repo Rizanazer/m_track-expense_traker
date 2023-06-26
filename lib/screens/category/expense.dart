@@ -43,23 +43,9 @@ class _expenseState extends State<expense> {
       .child('All')
       .orderByChild('mode')
       .equalTo('DEBITED');
-  // void someFunction() {
-  //   final listViewState = listViewKey.currentState;
-  //   final listViewId = listViewState?.hashCode;
-
-  //   if (listViewId != null) {
-  //     // Use the listViewId as needed
-  //     print('Current ListView ID: $listViewId');
-  //   }
-  // }
 
   Widget listItem({required Map data}) {
     return Container(
-      // margin: const EdgeInsets.all(10),
-      // padding: const EdgeInsets.all(10),
-      // height: 110,
-      // color: Colors.amberAccent,
-
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Card(
@@ -144,14 +130,6 @@ class _expenseState extends State<expense> {
           },
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     if (expense.selectedIndexNotifier.value == 0) {
-      //       print('Add Transaction');
-      //     }
-      //   },
-      //   child: Icon(Icons.add),
-      // ),
     );
   }
 }

@@ -32,16 +32,17 @@ class _monthly_statState extends State<monthly_stat> {
 
   final gradientList = <List<Color>>[
     [
-      const Color.fromARGB(255, 49, 29, 59),
+      const Color.fromARGB(255, 182, 169, 255),
       const Color.fromARGB(255, 133, 112, 250),
     ],
     [
-      Color.fromARGB(255, 255, 255, 255),
-      Color.fromARGB(255, 11, 0, 70),
+      const Color.fromARGB(255, 253, 175, 175),
+      const Color.fromARGB(255, 236, 119, 117),
     ],
     [
-      const Color.fromARGB(255, 145, 62, 175),
-      const Color.fromARGB(255, 254, 92, 197),
+      const Color.fromARGB(255, 71, 171, 141),
+      // Color.fromARGB(255, 170, 255, 146),
+      const Color.fromARGB(255, 128, 205, 207),
     ]
   ];
   Widget buildDropdownButton(
@@ -237,10 +238,7 @@ class _monthly_statState extends State<monthly_stat> {
 
   savings() async {
     var w = await getTotal('DEBITED');
-    // var f = await getTotaldebit('fixedcost');
-    // var v = await getTotaldebit('variablecost');
-    // var s;
-    // s = w - (f + v);
+
     return w;
   }
 
@@ -283,63 +281,20 @@ class _monthly_statState extends State<monthly_stat> {
       });
     });
 
-    // val_debit_fixed().then((val) {
-    //   print(val);
-    // });
-    // val_debit_variable().then((val) {
-    //   print(val);
-    // });
-    // val_income().then((val) {
-    //   print(val);
-    // });
-
-    // savings() {
-    //   if ((c * 100) > (f + v)) {
-    //     s = (c * 100) - (f + v);
-    //   } else {
-    //     s = 0;
-    //   }
-    //   return s;
-    // }
     late var t = (s - (v + f));
-
-    mediaquery = MediaQuery.of(context).size;
-    return Container(
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  top: mediaquery.height * .05,
-                  bottom: mediaquery.height * .05),
-              child: buildDropdownButton(
-                dropdownValue,
-                list1,
-                (String? value) {
-                  setState(() {
-                    dropdownValue = value!;
-                  });
-                },
-              ),
-            ),
-            FutureBuilder(
-              future: val_income(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                    break;
-                  case ConnectionState.waiting:
-                    return const CircularProgressIndicator(
-                      color: Colors.black54,
-                      strokeWidth: 2,
-                    );
-                  case ConnectionState.active:
-                    break;
-                  case ConnectionState.done:
-                    return Column(
+    // ignore: no_leading_underscores_for_local_identifiers
+    Widget _buildCarousel(item1, item2, item3) {
+      return SizedBox(
+          width: mediaquery.width * 1,
+          child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemCount: 1,
+              itemBuilder: (context, index) {
+                // create a container to hold each carousel item
+                return Column(
+                  children: [
+                    Column(
                       children: [
                         PieChart(
                           dataMap: {
@@ -371,26 +326,8 @@ class _monthly_statState extends State<monthly_stat> {
                             style: const TextStyle(
                                 fontSize: 15, color: Colors.black)),
                       ],
-                    );
-                }
-                return const Text('Some error ocurred try getDoctor');
-              },
-            ),
-            FutureBuilder(
-              future: val_exp(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                    break;
-                  case ConnectionState.waiting:
-                    return const CircularProgressIndicator(
-                      color: Colors.black,
-                      strokeWidth: 2,
-                    );
-                  case ConnectionState.active:
-                    break;
-                  case ConnectionState.done:
-                    return Column(
+                    ),
+                    Column(
                       children: [
                         PieChart(
                           dataMap: {
@@ -421,37 +358,52 @@ class _monthly_statState extends State<monthly_stat> {
                             style: const TextStyle(
                                 fontSize: 15, color: Colors.black)),
                       ],
-                    );
-                }
-                return const Text('Some error ocurred try getDoctor');
-              },
-            ),
-            FutureBuilder(
-              future: difference(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                    break;
-                  case ConnectionState.waiting:
-                    return const CircularProgressIndicator(
-                      color: Colors.black,
-                      strokeWidth: 2,
-                    );
-                  case ConnectionState.active:
-                    break;
-                  case ConnectionState.done:
-                    return Column(
+                    ),
+                    Column(
                       children: [
                         Text("previous months unaccounted: $d",
                             style: const TextStyle(
                                 fontSize: 15, color: Colors.black)),
                       ],
-                    );
-                }
-                return const Text('Some error ocurred try getDoctor');
-              },
-            ),
+                    )
+                  ],
+                );
+              }));
+    }
 
+    mediaquery = MediaQuery.of(context).size;
+    return Container(
+      decoration: const BoxDecoration(color: Color(0xFFFDE1D7)),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  top: mediaquery.height * .05,
+                  bottom: mediaquery.height * .05),
+              child: buildDropdownButton(
+                dropdownValue,
+                list1,
+                (String? value) {
+                  setState(() {
+                    dropdownValue = value!;
+                  });
+                },
+              ),
+            ),
+            FutureBuilder(
+                future: Future.wait([val_income(), val_exp(), difference()]),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    // if both future builders are done, build the carousel widget
+                    return _buildCarousel(
+                        snapshot.data[0], snapshot.data[1], snapshot.data[2]);
+                  } else {
+                    // show a loading indicator while waiting for the future builders to complete
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                }),
             Padding(
               padding: EdgeInsets.only(top: mediaquery.height * 0.03),
               child: const Text(
@@ -459,10 +411,6 @@ class _monthly_statState extends State<monthly_stat> {
                 style: TextStyle(fontSize: 10),
               ),
             ),
-            // Text(
-            //   review_var(c, v).toString(),
-            //   style: const TextStyle(fontSize: 15),
-            // ),
             const Text(
               "variable expense=food+movie+travel+study expense+etc...",
               style: TextStyle(fontSize: 10),

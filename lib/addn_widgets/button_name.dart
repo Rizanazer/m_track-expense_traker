@@ -1,64 +1,56 @@
 // ignore: camel_case_types
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class buttonname extends StatelessWidget {
   final String name;
   final double x;
   final double y;
-  final double z;
+  final double size;
   // ignore: prefer_typing_uninitialized_variables
-  final icon;
+
   // ignore: prefer_typing_uninitialized_variables
   final pagex;
-  const buttonname(
-      {super.key,
-      required this.name,
-      required this.x,
-      required this.pagex,
-      required this.icon,
-      required this.y,
-      required this.z});
+  const buttonname({
+    super.key,
+    required this.name,
+    required this.pagex,
+    required this.x,
+    required this.y,
+    required this.size,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 10),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => pagex));
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromRGBO(252, 244, 255, 1),
-                    foregroundColor: Colors.black,
-                    padding: EdgeInsets.symmetric(horizontal: x, vertical: y)),
-                label: Text(name),
-                icon: Image.asset(
-                  icon,
-                  width: 20,
-                  height: 20,
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => pagex));
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFF77D8E),
+                padding: EdgeInsets.symmetric(horizontal: x, vertical: y),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(25),
+                    bottomRight: Radius.circular(25),
+                    bottomLeft: Radius.circular(25),
+                  ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: CircularPercentIndicator(
-                  radius: 18,
-                  animation: true,
-                  lineWidth: 5,
-                  progressColor: Colors.red,
-                  percent: z,
-                ),
-              )
-            ],
-          )
-        ],
-      ),
+              child: Text(
+                name,
+                style: TextStyle(color: Colors.white, fontSize: size),
+              ),
+            ),
+          ],
+        )
+      ],
     );
   }
 }

@@ -133,7 +133,7 @@ class _ScreenTransactionState extends State<ScreenTransaction> {
             ),
             // ignore: prefer_interpolation_to_compose_strings
             title: debit(data),
-            trailing: Image.asset("assets/loading.gif"),
+            trailing: Image.asset("assets/coins.gif"),
           ),
         ),
       );

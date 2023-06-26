@@ -18,7 +18,7 @@ class chart extends StatelessWidget {
       },
       child: CircularPercentIndicator(
         backgroundColor: Colors.transparent,
-        progressColor: const Color.fromARGB(255, 139, 57, 171),
+        progressColor: const Color(0xFFF77D8E),
         radius: 50.0,
         lineWidth: 10.0,
         animation: true,
@@ -28,7 +28,7 @@ class chart extends StatelessWidget {
           style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20.0,
-              color: Color.fromARGB(255, 139, 57, 171)),
+              color: Colors.black38),
         ),
       ),
     );

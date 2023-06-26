@@ -1,7 +1,6 @@
 //
 import 'dart:ui';
 
-import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'dart:collection';
 
@@ -16,21 +15,6 @@ class priority extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // TRY THIS: Try running your application with "flutter run". You'll see
-          // the application has a blue toolbar. Then, without quitting the app,
-          // try changing the seedColor in the colorScheme below to Colors.green
-          // and then invoke "hot reload" (save your changes or press the "hot
-          // reload" button in a Flutter-supported IDE, or press "r" if you used
-          // the command line to start the app).
-          //
-          // Notice that the counter didn't reset back to zero; the application
-          // state is not lost during the reload. To reset the state, use hot
-          // restart instead.
-          //
-          // This works for code too, not just values: Most code changes can be
-          // tested with just a hot reload.
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
@@ -82,7 +66,7 @@ class _welcome_screenState extends State<welcome_screen> {
       'BT-IOBCHN',
       'CP-IOBCHN',
       'JK-CANBNK',
-      'AX-CANBNK'
+      'AX-CANBNK',
     ]);
     super.initState();
     //   controller.addListener(rebuild);
@@ -128,6 +112,7 @@ class _welcome_screenState extends State<welcome_screen> {
 
       var regex;
       var mode;
+
       var purpose = 'none_Assigned';
       if (dropdownValue == 'IO-bank') {
         if (smsText.contains('Debit')) {
@@ -152,6 +137,12 @@ class _welcome_screenState extends State<welcome_screen> {
         data["DateTime"] = date;
         data["mode"] = mode;
         data["purpose"] = purpose;
+        // ignore: unrelated_type_equality_checks
+        if (["purpose"] == 'none_Assigned') {
+          data["purpose"] = purpose;
+        } else {
+          continue;
+        }
 
         mRootreference.child("BankDb").child('All').child(id1).update(data);
       } else if (dropdownValue == 'Canara Bank') {
@@ -243,32 +234,41 @@ class _welcome_screenState extends State<welcome_screen> {
             child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const Text(
-                            "enter ur bank: ",
-                            style: TextStyle(fontSize: 15, color: Colors.black),
-                          ),
-                          buildDropdownButton(
-                            dropdownValue,
-                            list,
-                            (String? value) {
-                              setState(() {
-                                dropdownValue = value!;
-                              });
-                            },
-                          )
-                        ],
-                      ),
+                    const SizedBox(
+                      height: 100,
+                    ),
+                    SizedBox(
+                        height: 200,
+                        width: 200,
+                        child: Image.asset('assets/ashi pig.gif')),
+                    const SizedBox(
+                      height: 90,
+                    ),
+                    const Text(
+                      "enter your bank: ",
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          decoration: TextDecoration.none),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    buildDropdownButton(
+                      dropdownValue,
+                      list,
+                      (String? value) {
+                        setState(() {
+                          dropdownValue = value!;
+                        });
+                      },
                     ),
                     ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ScreenHome(),
+                            builder: (context) => const ScreenHome(),
                           ));
                         },
                         child: const Text("next  ->"))
@@ -285,6 +285,7 @@ class _welcome_screenState extends State<welcome_screen> {
     return DropdownButton<String>(
       value: selectedValue,
       onChanged: onChanged,
+      dropdownColor: Colors.white,
       items: dropdownValues.map((String value) {
         return DropdownMenuItem<String>(
           value: value,

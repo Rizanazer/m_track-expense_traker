@@ -1,9 +1,0 @@
-dialogbox(
-                            controller: _update,
-                            ontap: () {
-                              data.update(
-                                'amount',
-                                (value) => _update.text,
-                                ifAbsent: () => _update.text,
-                              );
-                            });

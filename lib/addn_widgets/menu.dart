@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:m_trackn/addn_widgets/button_name.dart';
+import 'package:m_trackn/screens/temp/temp_message.dart';
 import 'package:rive/rive.dart';
 
 import 'button_normal.dart';
@@ -49,18 +51,26 @@ class menu extends StatelessWidget {
             duration: const Duration(milliseconds: 260),
             child: SafeArea(
               child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: mediaquery.width * .18,
+                      vertical: mediaquery.height * .18),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      button_normal(
+                      button_logout(
                         name: "log out",
-                        x: mediaquery.width * 0.262,
-                        icon: "assets/loading.gif",
-                        color: Colors.redAccent,
+                        x: mediaquery.width * 0.239,
                         y: 20,
-                        z: 0,
+                        size: 20,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      buttonname(
+                        name: "sms_temp",
+                        pagex: const temp_msg(),
+                        x: mediaquery.width * 0.199,
+                        y: 20,
+                        size: 20,
                       ),
                     ],
                   )),

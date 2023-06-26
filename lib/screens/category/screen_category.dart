@@ -12,7 +12,7 @@ class ScreenCategory extends StatefulWidget {
 class _ScreenCategoryState extends State<ScreenCategory>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  // static ValueNotifier<int> selectedIndexNotifier = ValueNotifier(0);
+
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
@@ -25,11 +25,7 @@ class _ScreenCategoryState extends State<ScreenCategory>
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(color: Color(0xFFFDE1D7)),
-          // image: DecorationImage(
-          //     image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)
-
           child: Container(
-            // margin: EdgeInsets.only(top: 50),
             child: Column(
               children: [
                 TabBar(

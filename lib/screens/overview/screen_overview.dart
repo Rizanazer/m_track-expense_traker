@@ -1,19 +1,18 @@
 // ignore: unused_import
 import 'dart:collection';
-import 'package:flutter_carousel_slider/carousel_slider.dart';
+
 // ignore: unused_import
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:firebase_database/firebase_database.dart';
 
 import 'package:flutter/material.dart';
+import 'package:m_trackn/addn_widgets/button_name.dart';
 import 'package:m_trackn/screens/category/expense.dart';
 
 import 'package:m_trackn/screens/category/income.dart';
 import 'package:m_trackn/screens/overview/stats/month_chart.dart';
-import 'package:m_trackn/screens/temp/temp_message.dart';
-// import 'package:m_trackn/screens/transactions/dialogbox.dart';
 
-import '../../addn_widgets/button_name.dart';
+// import 'package:m_trackn/screens/transactions/dialogbox.dart';
 
 import '../../addn_widgets/chart.dart';
 import '../../addn_widgets/pad_text.dart';
@@ -253,16 +252,16 @@ class _nameState extends State<overview> {
           itemBuilder: (context, index) {
             // create a container to hold each carousel item
             return Container(
-              // set the width of each carousel item
-              child: Card(
-                color: Color.fromARGB(255, 248, 234, 230),
+              margin: EdgeInsets.only(
+                  left: mediaquery.width * .15, top: mediaquery.height * .01),
+              child: Container(
+                color: const Color(0xFFFDE1D7),
                 child: index == 0
                     ? Center(
                         child: Column(
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 150),
+                              padding: const EdgeInsets.symmetric(vertical: 0),
                               child:
                                   chart(q: w!, v: wtext(), w: const income()),
                             ),
@@ -273,7 +272,7 @@ class _nameState extends State<overview> {
                               name: "Income",
                               fontsize: 15,
                               fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 139, 57, 171),
+                              color: Colors.black,
                             ),
                           ],
                         ),
@@ -283,7 +282,7 @@ class _nameState extends State<overview> {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 150),
+                                  const EdgeInsets.symmetric(horizontal: 0),
                               child:
                                   chart(q: a!, v: atext(), w: const expense()),
                             ),
@@ -294,7 +293,7 @@ class _nameState extends State<overview> {
                               name: "Expense",
                               fontsize: 15,
                               fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 139, 57, 171),
+                              color: Colors.black,
                             ),
                             SizedBox(
                               height: mediaquery.height * .007,
@@ -312,11 +311,7 @@ class _nameState extends State<overview> {
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
-        // margin: EdgeInsets.only(top: mediaquery.height * .12),
-        decoration: const BoxDecoration(
-            // image: DecorationImage(
-            //     image: AssetImage("assets/banner-bg.jpg"), fit: BoxFit.fill)
-            color: Color(0xFFFDE1D7)),
+        decoration: const BoxDecoration(color: Color(0xFFFDE1D7)),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           FutureBuilder(
               future: Future.wait([val(), val1()]),
@@ -448,151 +443,45 @@ class _nameState extends State<overview> {
                 SizedBox(
                   height: mediaquery.width * 0.05,
                 ),
-                buttonname(
-                    name: "sms_temp",
-                    x: mediaquery.width * 0.23,
-                    pagex: const temp_msg(),
-                    icon: "assets/loading.gif",
-                    y: 20,
-                    z: 0),
                 SizedBox(
                   height: mediaquery.width * 0.05,
                 ),
-                Column(children: [
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('not allocated')));
-                        },
-                        child: Container(
-                            margin: EdgeInsets.only(
-                              top: mediaquery.height * .009,
-                              left: mediaquery.width * .03,
-                              // right: mediaquery.width * .03,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color.fromARGB(137, 255, 0, 0),
-                                  width: 5),
-                              borderRadius: BorderRadius.circular(
-                                  mediaquery.width * 0.05),
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: mediaquery.width * 0.14,
-                                  vertical: mediaquery.width * 0.14),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: mediaquery.width * 0.02),
-                                child: const Text("daily"),
-                              ),
-                            )),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('not allocated')));
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(
-                            top: mediaquery.height * .009,
-                            left: mediaquery.width * .03,
-                            // right: mediaquery.width * .03,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color.fromARGB(137, 255, 0, 0),
-                                width: 5),
-                            borderRadius:
-                                BorderRadius.circular(mediaquery.width * 0.05),
-                            color: Colors.white,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: mediaquery.width * 0.14,
-                                vertical: mediaquery.width * 0.14),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: mediaquery.width * 0.04),
-                              child: const Text("all"),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: mediaquery.width * 0.02,
-                  ),
-                  Row(
-                    children: [
-                      InkWell(
-                        // onTap: () => const monthly_stat(),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const monthly_stat()));
-                        },
-                        child: Container(
-                            margin: EdgeInsets.only(
-                              top: mediaquery.height * .009,
-                              left: mediaquery.width * .03,
-                              // right: mediaquery.width * .03,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color.fromARGB(137, 255, 0, 0),
-                                  width: 5),
-                              borderRadius: BorderRadius.circular(
-                                  mediaquery.width * 0.05),
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: mediaquery.width * 0.12,
-                                  vertical: mediaquery.width * 0.14),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: mediaquery.width * 0.01),
-                                child: const Text("monthly"),
-                              ),
-                            )),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('not allocated')));
-                        },
-                        child: Container(
-                            margin: EdgeInsets.only(
-                              top: mediaquery.height * .009,
-                              left: mediaquery.width * .03,
-                              // right: mediaquery.width * .03,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: const Color.fromARGB(137, 255, 0, 0),
-                                  width: 5),
-                              borderRadius: BorderRadius.circular(
-                                  mediaquery.width * 0.05),
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: mediaquery.width * 0.14,
-                                  vertical: mediaquery.width * 0.14),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: mediaquery.width * 0.015),
-                                child: const Text("yearly"),
-                              ),
-                            )),
-                      )
-                    ],
-                  )
-                ]),
+                Padding(
+                  padding: EdgeInsets.only(left: mediaquery.width * .20),
+                  child: Column(children: [
+                    buttonname(
+                      name: "monthly",
+                      pagex: const monthly_stat(),
+                      x: mediaquery.width * .21,
+                      y: 20,
+                      size: 16,
+                    ),
+                    const SizedBox(height: 15),
+                    buttonname(
+                      name: "daily",
+                      pagex: const monthly_stat(),
+                      x: mediaquery.width * .234,
+                      y: 20,
+                      size: 16,
+                    ),
+                    const SizedBox(height: 15),
+                    buttonname(
+                      name: "yearly",
+                      pagex: const monthly_stat(),
+                      x: mediaquery.width * .225,
+                      y: 20,
+                      size: 16,
+                    ),
+                    const SizedBox(height: 15),
+                    buttonname(
+                      name: "all data",
+                      pagex: const monthly_stat(),
+                      x: mediaquery.width * .215,
+                      y: 20,
+                      size: 16,
+                    ),
+                  ]),
+                ),
                 SizedBox(
                   height: mediaquery.width * 0.05,
                 ),
@@ -607,7 +496,7 @@ class _nameState extends State<overview> {
             ),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(mediaquery.width * 0.1),
-                color: Colors.white70,
+                color: Colors.transparent,
                 boxShadow: [
                   BoxShadow(
                       blurRadius: mediaquery.width * 0.1,
@@ -620,7 +509,7 @@ class _nameState extends State<overview> {
                 height: mediaquery.width * 0.05,
               ),
               SizedBox(
-                height: mediaquery.width * 0.05,
+                height: mediaquery.width * 0.35,
               )
             ]),
           ),
@@ -631,11 +520,81 @@ class _nameState extends State<overview> {
 
   limit() {
     if (limitValue <= (a * 100.00)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("your way over ur limit bro....")));
+      return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              child: SizedBox(
+            height: mediaquery.height * .3,
+            width: mediaquery.width * .15,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: mediaquery.height * .01,
+                ),
+                const Text(
+                  "YOO !!",
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.green),
+                ),
+                const Text('your good Bro...',
+                    style:
+                        TextStyle(fontSize: 10, fontWeight: FontWeight.w700)),
+                SizedBox(
+                  height: mediaquery.height * .03,
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: Image.asset("assets/rich.png"),
+                )
+              ],
+            ),
+          ));
+        },
+      );
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("your good bro....")));
+      return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              child: SizedBox(
+            height: mediaquery.height * .3,
+            width: mediaquery.width * .15,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: mediaquery.height * .01,
+                ),
+                const Text(
+                  "Oops Dude !!",
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.red),
+                ),
+                const Text('your Way over your limit Bro...',
+                    style:
+                        TextStyle(fontSize: 10, fontWeight: FontWeight.w700)),
+                SizedBox(
+                  height: mediaquery.height * .03,
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: Image.asset("assets/no-savings.png"),
+                )
+              ],
+            ),
+          ));
+        },
+      );
     }
   }
 }
